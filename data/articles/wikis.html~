@@ -12,20 +12,31 @@
 </script>
 </head>
 <body>
-<h2>The Graphs</h2>
+<h2>The Wikis</h2>
 <div>
 <ul>
 <li>
-<a href='articles/index.html' target='_blank'>Articles</a>
+<a href='es/index.html' target='_blank'>es</a>
 </li>
 <li>
-<a href='editors/index.html' target='_blank'>Editors</a>
+<a href='es/index.html' target='_blank'>es</a>
 </li>
-<!--
 <li>
-<a href='experiments/index.html' target='_blank'>Experiments</a>
+<a href='es/index.html' target='_blank'>es</a>
 </li>
--->
+<li>
+<a href='es/index.html' target='_blank'>es</a>
+</li>
+<li>
+<a href='es/index.html' target='_blank'>es</a>
+</li>
+<li>
+<a href='es/index.html' target='_blank'>es</a>
+</li>
+
+<li>
+<a href='zh/index.html' target='_blank'>zh</a>
+</li>
 </ul>
 <a href='https://meta.wikimedia.org/wiki/Research:Editor_Behaviour_Analysis_%26_Graphs' target='_blank'>Read more about the graphs.</a>
 </body>

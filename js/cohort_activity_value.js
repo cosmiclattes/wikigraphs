@@ -1,0 +1,108 @@
+/* Scales */
+var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, graph_width]);
+
+var highest = 1;
+
+var data_transformation = function(matrix){
+	for(i=0;i<matrix_size;i++){
+		var month = 1;
+		for(j=0;j<matrix_size;j++){
+			if(matrix[i][j]>highest){
+				highest = matrix[i][j];
+			}
+			var data ={};
+			if(matrix[i][j]){
+				data['value'] = matrix[i][j];
+				data['month'] = month;
+				month +=1;
+			}
+			else{
+				data['value'] = 0;
+			}
+			matrix[i][j] = data;
+		}
+	}
+	
+	//Global scale for variable column width
+	column_width = d3.scale.linear().domain([0,highest]).range([0,100]);
+	
+	for(i=0;i<matrix_size;i++){
+		var counter = 0;
+		for(j=0;j<matrix_size;j++){
+			matrix[i][j]['x']=counter;
+			counter += column_width(matrix[i][j]['value']);
+		}
+	}
+
+	return matrix;
+};
+
+var init_graph = function(matrix){
+	//Over riding height & width
+	var margin = {top: 30, right: 20, bottom: 20, left: 15};
+	var width = 2050 - margin.right - margin.left, height = 1410 - margin.top - margin.right;
+	
+	var graph_container = d3.select('#viz').append('svg').attr('width', width + margin.left + margin.right)
+		.attr('height', height + margin.top + margin.bottom).style('margin-left', margin.left + 'px').append('g')
+		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50) + ')')
+		.append('g');
+	graph_container.append('rect').attr('class', 'background').attr('width', graph_width).attr('height', height-50);
+	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
+		.attr('transform', function(d, i){
+			return  'translate(0,' + x(i) + ')';
+		}).on('mouseover', function(d,i){
+			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
+			d3.select(this).select('text').attr('class','active');
+		});
+	row.selectAll('.cell').data(function(d){
+		return d;
+		}).enter().append('rect').attr('class', 'cell')
+		.attr('x', function(d, i)  {
+			return d.x;
+		}).attr('width', function(d,i){
+			return column_width(d.value);
+		})
+		.attr('height', function(d,i){
+			return x.rangeBand();
+		});
+	row.append('line').attr('x2', graph_width);
+	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
+		.attr('text-anchor', 'end').text(function(d,  i) {
+			var date = time_format.parse(date_reverse_lookup[i]);
+		        return time_format(date);
+		});
+	var column = graph_container.selectAll('.column').data(matrix).enter().append('g').attr('class', 'column')
+		.attr('transform', function(d, i)  {
+			return 'translate(' + x(i) + ')rotate(-90)';
+		});
+	var brush_options ={
+				'height': 30,
+				'width': 2000,
+				'domain': [1,179],
+				'extent': [1,179],
+				'ticks': 180,
+				'round': 1,
+	};
+	init_brush(brush_options, make_filter(row,matrix,[1,1,1,179,179,179],['#ffffff', '#ffffff', '#deebf7','#3182bd', '#ffffff', '#ffffff'], function(d){
+		return 	d.month;	
+	}));
+};
+var annotate_graph = function(){
+	//Adding Title
+	var title = 'Editor Cohort - Total Edit Sessions';
+	$('.title').text(title);
+	
+	//Adding Notes
+	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
+<li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
+<li>X-axis No of Edit sessions, Y-axis(editor cohort)</li>\
+<li>Each row gives the total edit sessions for a given editor cohort.</li>\
+<li>The brush lets you filter the graph by months since birth in a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for each cohort in its first month, the no of edit sessions in the first month for cohorts Jan 01 ... Dec 15 etc. </li>');
+	$('#notes').append(notes);
+};
+
+var init_page = function(){
+	matrix = data_transformation(matrix);
+	init_graph(matrix);
+	annotate_graph();
+};
