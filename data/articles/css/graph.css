@@ -1,0 +1,77 @@
+body{
+	margin: 0px;
+}
+.background {
+	fill: #eee;
+}
+line {
+	stroke: #fff;stroke-opacity: .5;
+	shape-rendering: crispEdges;
+}
+text{
+	font-size:7.5px;
+	fill: #333;
+  	stroke: none;
+	shape-rendering: crispEdges;
+  
+}
+text.active{
+	fill: #cc3333;
+}
+
+/* Brush styling */
+.axis text {
+  font: 7px sans-serif;
+  fill: #333;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.grid .minor.tick line {
+  stroke-opacity: .5;
+  fill: none;
+  stroke: #333;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #000;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.title, #metadata{
+  margin-left: 15px;
+}
+
+#length_query_set, #time_taken_query{
+  display: none;
+}
+
+#notes ul{
+  padding-left: 15px;
+}
+
+.title{
+  font-size: 30px;
+  color: #333;	
+}
