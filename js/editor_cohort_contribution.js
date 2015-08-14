@@ -44,6 +44,9 @@ var init_graph = function(matrix){
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		        .attr('transform', function(d, i){
 		                return  'translate(0,' + x(i) + ')';
+		        }).attr('cohort', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
 		        }).on('mouseover', function(d,i){
 		                //Highlighting the row text
 		                d3.selectAll(".row text").classed("active", function(d, i) { return false; });
@@ -54,11 +57,27 @@ var init_graph = function(matrix){
 		                return x(i);
 		        }).attr('width', x.rangeBand())
 		        .attr('height', x.rangeBand())
-		        .on('mouseover', function(d,i){
+			.attr('value', function(d, i)  { 
+		                return d; 
+		        })
+			.attr('month', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
+		        })
+			.attr('cohort', function(d, i)  { 
+		                var row = d3.select(this.parentNode);
+			        return row.attr('cohort');
+		        })		        
+			.on('mouseover', function(d,i){
 		                //Highlighting the column index
 		                d3.selectAll(".column text").classed("active", function(d, i) { return false; });
 		                d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
-		        });
+				var elem = d3.select(this);
+				showTooltip(elem, '#viz g');
+		        })
+			.on('mouseout', function(){
+				hideTooltip();
+			});
 	row.append('line').attr('x2', width);
 	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
 		.attr('text-anchor', 'end')
@@ -102,6 +121,7 @@ var annotate_graph = function(){
 <li>Each row in a column gives the contribution in percentage of the row(editor group) in the column(month). Eg: (Jan 05, Feb 05) gives the % of editor activity from the editor group(row) Jan 05 in the month(column) of Feb 05</li>\
 <li>The selector lets you filter the graph by percentage. The default selection is 0% - 100%.</li></ul>');
 	$('#notes').append(notes);
+	createTooltip();
 };
 
 var init_page = function(){

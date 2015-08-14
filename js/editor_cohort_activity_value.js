@@ -50,7 +50,10 @@ var init_graph = function(matrix){
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
 			return  'translate(0,' + x(i) + ')';
-		}).on('mouseover', function(d,i){
+		}).attr('cohort', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
+	        }).on('mouseover', function(d,i){
 			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
 			d3.select(this).select('text').attr('class','active');
 		});
@@ -64,6 +67,22 @@ var init_graph = function(matrix){
 		})
 		.attr('height', function(d,i){
 			return x.rangeBand();
+		}).attr('value', function(d, i)  { 
+		                return d['value']; 
+	        })
+		.attr('month', function(d, i)  { 
+	                var date = time_format.parse(date_reverse_lookup[i]);
+		        return time_format(date);
+	        })
+		.attr('cohort', function(d, i)  { 
+	                var row = d3.select(this.parentNode);
+		        return row.attr('cohort');
+	        }).on('mouseover', function(d,i){
+	                var elem = d3.select(this);
+			showTooltip(elem, '#viz g');
+	        })
+		.on('mouseout', function(){
+			hideTooltip();
 		});
 	row.append('line').attr('x2', graph_width);
 	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
@@ -99,6 +118,7 @@ var annotate_graph = function(){
 <li>Each row gives the total edit sessions for a given editor cohort.</li>\
 <li>The brush lets you filter the graph by months since birth in a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for each cohort in its first month, the no of edit sessions in the first month for cohorts Jan 01 ... Dec 15 etc. </li>');
 	$('#notes').append(notes);
+	createTooltip();
 };
 
 var init_page = function(){

@@ -78,6 +78,9 @@ var init_graph = function(matrix){
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
 			return  'translate(0,' + x(i) + ')';
+		}).attr('cohort', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
 		}).on('mouseover', function(d,i){
 			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
 			d3.select(this).select('text').attr('class','active');
@@ -92,7 +95,23 @@ var init_graph = function(matrix){
 		return column_width(d.value);
 	}).attr('height', function(d,i){
 		return x.rangeBand();
-	}).attr('month', function(d,i){return d.month});
+	}).attr('value', function(d, i)  { 
+		                return d['value']; 
+        })
+	.attr('month', function(d, i)  { 
+                var date = time_format.parse(date_reverse_lookup[i]);
+	        return time_format(date);
+        })
+	.attr('cohort', function(d, i)  { 
+                var row = d3.select(this.parentNode);
+	        return row.attr('cohort');
+        }).on('mouseover', function(d,i){
+                var elem = d3.select(this);
+		showTooltip(elem, '#viz g');
+        })
+	.on('mouseout', function(){
+		hideTooltip();
+	});
 	row.append('line').attr('x2', width);
 	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
 	.attr('text-anchor', 'end').text(function(d,  i) {
@@ -129,6 +148,7 @@ var annotate_graph = function(){
 <li>The bar in each row is split by the contribution from each editor cohort.</li>\
 <li>The selector lets you filter the graph by age of a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for cohorts of age 1 in each month, In month Jan 05 - cohort Jan 05 has age 1, Dec 04 has age 2 etc. </li>');
 	$('#notes').append(notes);
+	createTooltip();
 };
 
 var init_page = function(){

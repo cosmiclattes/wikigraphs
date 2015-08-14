@@ -30,6 +30,9 @@ var init_graph = function(matrix){
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		        .attr('transform', function(d, i){
 		                return  'translate(0,' + x(i) + ')';
+		        }).attr('cohort', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
 		        }).on('mouseover', function(d,i){
 		                //Highlighting the row text
 		                d3.selectAll(".row text").classed("active", function(d, i) { return false; });
@@ -40,11 +43,28 @@ var init_graph = function(matrix){
 		                return x(i); 
 		        }).attr('width', x.rangeBand())
 		        .attr('height', x.rangeBand())
-		        .on('mouseover', function(d,i){
+			.attr('value', function(d, i)  { 
+		                return d; 
+		        })
+			.attr('month', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
+		        })
+			.attr('cohort', function(d, i)  { 
+		                var row = d3.select(this.parentNode);
+			        return row.attr('cohort');
+		        })
+			.on('mouseover', function(d,i){
 		                //Highlighting the column index
 		                d3.selectAll(".column text").classed("active", function(d, i) { return false; });
 		                d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
-		        });
+				
+				var elem = d3.select(this);
+				showTooltip(elem, '#viz g');
+			})
+			.on('mouseout', function(){
+				hideTooltip();
+			});
 	row.append('line').attr('x2', width);
 	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
 		.attr('text-anchor', 'end')
@@ -86,10 +106,11 @@ var annotate_graph = function(){
 	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
 <li>Editors are grouped by the month in which they made their first edit.</li>\
 <li>X-axis(month), Y-axis(editor group)</li>\
-<li>Each row in the graph represents the edit activity in an editor group</li>\
+<li>Each row in the graph represents the activity of an editor group, eg: Editors who made their first edit in Jan 05.</li>\
 <li>Each column in a row gives the percentage of editors who were active in a given month(column) from a group(row).</li>\
 <li>The selector lets you filter the graph by percentage. The default selection is 0% - 100%.</li></ul>');
 	$('#notes').append(notes);
+	createTooltip();
 };
 
 var init_page = function(){
