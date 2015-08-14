@@ -17,7 +17,7 @@ var init_brush = function(options, callback){
 	    .extent(brush_extent)
 	    .on("brushend", brushended);
 
-	var brush_container = d3.select("svg").append("g");
+	var brush_container = d3.select("svg").append("g").attr("transform", "translate(12, 0)");
 	brush_container.append("rect")
 	    .attr("class", "grid-background")
 	    .attr("width", brush_width)
@@ -55,6 +55,13 @@ var init_brush = function(options, callback){
 
 	gBrush.selectAll("rect")
 	    .attr("height", brush_height);
+	
+	gBrush.selectAll(".resize").append("line")
+	    .attr("y2", brush_height);
+	
+	gBrush.selectAll(".resize").append("path")
+	.attr("d", d3.svg.symbol().type("triangle-up").size(30))
+	.attr("transform", function(d,i) {  return i ? "translate(" + -5 + "," +  brush_height / 2 + ") rotate(-90)" : "translate(" + 5 + "," +  brush_height / 2 + ") rotate(90)"; });
 
 	function brushended() {
 		if (d3.event.sourceEvent || initially_fire_callback){
