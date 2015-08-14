@@ -208,8 +208,58 @@ var make_filter = function(row, matrix, domain, range, fn){
 		};
 		row.selectAll('.cell').data(function(d, i) { 
 						return d;
-					}).style('fill', color);
+					}).transition().delay(function(d,i){return i*20;}).duration(500)/*.ease('exp')*/.style('fill', color);
 	};
+};
+
+var showTooltip = function(elem, containerSelector) {
+	var coordinates = d3.mouse(d3.select('body')[0][0]);
+	var x = coordinates[0];
+	var y = coordinates[1];
+
+	var bodyRect = document.body.getBoundingClientRect();
+	var elemRect = elem[0][0].getBoundingClientRect();
+	var topOffset  = elemRect.top - bodyRect.top;
+	var leftOffset  = elemRect.left - bodyRect.left;
+	//Set first location of tooltip and change opacity
+	var xpos = x ;
+	var ypos = y ;
+	 
+	//Position the tooltip
+	d3.select("#tooltip")
+		.style('top',ypos+"px")
+		.style('left',xpos+"px")
+		.style('opacity',1);	
+
+	//Change the texts inside the tooltip
+	//d3.select("#tooltip .cohort").text(elem.attr('group'));
+	var value = elem.attr('value');
+	
+	d3.select("#tooltip .value").html('Value: '+value);
+	d3.select("#tooltip .month").html('Month: '+elem.attr('month'));
+	d3.select("#tooltip .cohort").html('Cohort: '+elem.attr('cohort'));
+}
+
+var hideTooltip = function(d) {
+	//Hide tooltip
+	d3.select("#tooltip")
+		.style('opacity',0)
+		.style('top',0+"px")
+		.style('left',0+"px");
+}
+
+var createTooltip = function(){
+		//Creating the tooltip
+	var tooltipContainer = $('<div>').attr('id','tooltipContainer');
+	var tooltip = $('<div>').attr('id','tooltip');
+	var tooltipValue = $('<div>').attr('class','value');
+	var tooltipMonth = $('<div>').attr('class','month');
+	var tooltipCohort = $('<div>').attr('class','cohort');
+	tooltip.append(tooltipContainer);
+	tooltipContainer.append(tooltipValue);
+	tooltipContainer.append(tooltipMonth);
+	tooltipContainer.append(tooltipCohort);
+	$('body').append(tooltip);
 };
 
 /* Globals Variables */
