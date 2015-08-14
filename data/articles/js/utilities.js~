@@ -208,6 +208,12 @@ var make_filter = function(row, matrix, domain, range, fn){
 		};
 		row.selectAll('.cell').data(function(d, i) { 
 						return d;
+<<<<<<< HEAD
+					}).style('fill', color);
+	};
+};
+
+=======
 					}).transition().delay(function(d,i){return i*20;}).duration(500)/*.ease('exp')*/.style('fill', color);
 	};
 };
@@ -262,6 +268,7 @@ var createTooltip = function(){
 	$('body').append(tooltip);
 };
 
+>>>>>>> master
 /* Globals Variables */
 var margin = {top: 25, right: 25, bottom: 25, left: 15};
 var width = 1350 - margin.right - margin.left, height = 1400 - margin.top - margin.right; 

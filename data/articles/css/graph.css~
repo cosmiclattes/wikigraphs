@@ -5,7 +5,11 @@ body{
 	fill: #eee;
 }
 line {
+<<<<<<< HEAD
+	stroke: #fff;stroke-opacity: .5;
+=======
 	stroke: #fff;
+>>>>>>> master
 	shape-rendering: crispEdges;
 }
 text{
@@ -21,6 +25,20 @@ text.active{
 
 /* Brush styling */
 .axis text {
+<<<<<<< HEAD
+  font: 7px sans-serif;
+  fill: #333;
+}
+
+.axis path {
+  display: none;
+}
+
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+=======
 	font: 7px sans-serif;
 	fill: #333;
 }
@@ -48,6 +66,7 @@ text.active{
 	fill-opacity: 1;
 	stroke: #7A7A7A;
 	stroke-width: 3px;
+>>>>>>> master
 }
 
 .grid-background {
@@ -64,11 +83,19 @@ text.active{
 .grid .minor.tick line {
   stroke-opacity: .5;
   fill: none;
+<<<<<<< HEAD
+  stroke: #333;
+=======
   stroke: #7A7A7A;
+>>>>>>> master
   shape-rendering: crispEdges;
 }
 
 .brush .extent {
+<<<<<<< HEAD
+  stroke: #000;
+=======
+>>>>>>> master
   fill-opacity: .125;
   shape-rendering: crispEdges;
 }
@@ -89,6 +116,8 @@ text.active{
   font-size: 30px;
   color: #333;	
 }
+<<<<<<< HEAD
+=======
 
 /* Tooltip */
 #tooltipContainer {
@@ -116,3 +145,4 @@ text.active{
   opacity: 0;
 }
 
+>>>>>>> master

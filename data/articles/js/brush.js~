@@ -17,8 +17,11 @@ var init_brush = function(options, callback){
 	    .extent(brush_extent)
 	    .on("brushend", brushended);
 
+<<<<<<< HEAD
+	var brush_container = d3.select("svg").append("g");
+=======
 	var brush_container = d3.select("svg").append("g").attr("transform", "translate(12, 0)");
-
+>>>>>>> master
 	brush_container.append("rect")
 	    .attr("class", "grid-background")
 	    .attr("width", brush_width)
