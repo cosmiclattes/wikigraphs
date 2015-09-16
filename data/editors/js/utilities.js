@@ -212,7 +212,8 @@ var make_filter = function(row, matrix, domain, range, fn){
 	};
 };
 
-var showTooltip = function(elem, containerSelector) {
+var showTooltip = function(elem, containerSelector, tooltip_elements) {
+	var tooltip_elements = tooltip_elements || ['month', 'value', 'cohort'];
 	var coordinates = d3.mouse(d3.select('body')[0][0]);
 	var x = coordinates[0];
 	var y = coordinates[1];
@@ -233,11 +234,11 @@ var showTooltip = function(elem, containerSelector) {
 
 	//Change the texts inside the tooltip
 	//d3.select("#tooltip .cohort").text(elem.attr('group'));
-	var value = elem.attr('value');
 	
-	d3.select("#tooltip .value").html('Value: '+value);
-	d3.select("#tooltip .month").html('Month: '+elem.attr('month'));
-	d3.select("#tooltip .cohort").html('Cohort: '+elem.attr('cohort'));
+	for(index in tooltip_elements){
+		var name = tooltip_elements[index];
+		d3.select("#tooltip ."+name).html(name+': '+elem.attr(name));	
+	}
 }
 
 var hideTooltip = function(d) {
@@ -248,17 +249,16 @@ var hideTooltip = function(d) {
 		.style('left',0+"px");
 }
 
-var createTooltip = function(){
-		//Creating the tooltip
+var createTooltip = function(tooltip_elements){
+	var list = tooltip_elements || ['month', 'value', 'cohort'];
+	//Creating the tooltip
 	var tooltipContainer = $('<div>').attr('id','tooltipContainer');
 	var tooltip = $('<div>').attr('id','tooltip');
-	var tooltipValue = $('<div>').attr('class','value');
-	var tooltipMonth = $('<div>').attr('class','month');
-	var tooltipCohort = $('<div>').attr('class','cohort');
 	tooltip.append(tooltipContainer);
-	tooltipContainer.append(tooltipValue);
-	tooltipContainer.append(tooltipMonth);
-	tooltipContainer.append(tooltipCohort);
+	for(index in list){
+		var elem = $('<div>').attr('class',list[index]);
+		tooltipContainer.append(elem);
+	}
 	$('body').append(tooltip);
 };
 
