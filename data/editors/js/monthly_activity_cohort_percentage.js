@@ -4,7 +4,6 @@ var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, graph_wi
 var highest = 1;
 
 var data_transformation = function(matrix){
-	//finding the first month
 
 	for(i=0;i<matrix_size;i++){
 		var total = 0;
@@ -25,8 +24,6 @@ var data_transformation = function(matrix){
 	
 	//Global scale for variable column width
 	column_width = d3.scale.linear().domain([0,100]).range([0,450]);
-	
-	
 
 	//Creating new array
 	matrix_rotated = new Array(matrix_size);
@@ -61,9 +58,6 @@ var data_transformation = function(matrix){
 		        //month +=1;
 
 		        if (first_month_found){
-				if(i==1){
-					console.log('Month : '+month+' , '+matrix_rotated[i][j]['value']);
-				}
 		                matrix_rotated[i][j]['month'] = month;
 		                month += 1;
 		        }
@@ -108,8 +102,6 @@ var init_graph = function(matrix){
 	.attr('cohort', function(d, i)  { 
                 var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
 	        return time_format(date);
-        }).attr('month_no', function(d, i)  { 
-	        return d.month;
         })
 	.attr('month', function(d, i)  { 
                 var row = d3.select(this.parentNode);
@@ -151,12 +143,12 @@ var annotate_graph = function(){
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
+	var notes = $('<ul><li>An editor with edits >= 5/month is considered active.</li>\
 <li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
-<li>X-axis % of Edit sessions, Y-axis(month)</li>\
-<li>Each row gives the total % of edit sessions in a given month. (Hence, It is always 100%) </li>\
-<li>The bar in each row is split in % by the contribution from each editor cohort.</li>\
-<li>The selector lets you filter the graph by age of a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for cohorts of age 1 in each month, In month Jan 05 - cohort Jan 05 has age 1, Dec 04 has age 2 etc. </li>');
+<li>X-axis (time since the start of the wiki in months)</li>\
+<li>Y-axis (% contribution split by the cohorts of active editors in the month.)</li>\
+<li>The previous graph showed the total active editors in a month split by their cohorts. Here each column shows the contribution of each cohort in a month as a % of the total in the month.</li>\
+<li>The brush lets you filter the graph by the age of a cohort in a month. For ex, to see the contribution of only cohorts of age 1 month in every month we select 1-2 in the brush. This lets us see the contribution of the active editors joining in a month to the total active editors in the given month in %.</li>');
 	$('#notes').append(notes);
 	createTooltip();
 };

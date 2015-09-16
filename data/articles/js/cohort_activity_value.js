@@ -112,9 +112,10 @@ var annotate_graph = function(){
 	//Adding Notes
 	var notes = $('<ul><li>When an article has edits >= 5/month by logged in editors the article is considered active.</li>\
 <li>Articles are grouped by the month in which they were created - article cohort.</li>\
-<li>X-axis No of Edit sessions, Y-axis(article cohort)</li>\
+<li>X-axis (time since the start of the wiki)</li>\
+<li>Y-axis (article cohorts)</li>\
 <li>Each row gives the total edit sessions for a given article cohort.</li>\
-<li>The brush lets you filter the graph by months since birth in a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for each cohort in its first month, the no of edit sessions in the first month for cohorts Jan 01 ... Dec 15 etc. </li>');
+<li>The brush lets you look at the monthly activity of the cohorts. For ex, to see the activity of every cohort in its first month select 1-2 in the filter. </li>');
 	$('#notes').append(notes);
 	createTooltip();
 };

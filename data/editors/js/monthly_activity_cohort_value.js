@@ -4,7 +4,6 @@ var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, graph_wi
 var highest = 1;
 
 var data_transformation = function(matrix){
-	//finding the first month
 
 	for(i=0;i<matrix_size;i++){
 		var total = 0;
@@ -50,7 +49,7 @@ var data_transformation = function(matrix){
 		var first_month_found = 0;
 		for(j=0;j<matrix_size;j++){
 		        if(matrix_rotated[i][j]['value']){
-		                first_month_found += 1;
+		                first_month_found = 1;
 		        }
 		        //matrix[i][j]['month'] = j;
 		        //month +=1;
@@ -61,7 +60,6 @@ var data_transformation = function(matrix){
 		        }
 		}
 	}
-	
 	return matrix_rotated;
 };
 
@@ -96,10 +94,10 @@ var init_graph = function(matrix){
 	}).attr('height', function(d,i){
 		return column_width(d.value);
 	}).attr('value', function(d, i)  { 
-		                return d['value']; 
+			return d['value']; 
         })
 	.attr('cohort', function(d, i)  { 
-                var date = time_format.parse(date_reverse_lookup[i]);
+                var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
 	        return time_format(date);
         })
 	.attr('month', function(d, i)  { 
@@ -112,14 +110,7 @@ var init_graph = function(matrix){
 	.on('mouseout', function(){
 		hideTooltip();
 	});
-	/*
-	row.append('line').attr('x2', width);
-	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
-	.attr('text-anchor', 'end').text(function(d,  i) {
-		var date = time_format.parse(date_reverse_lookup[i])
-		return time_format(date);
-	});
-	*/
+	
 	var column = graph_container.selectAll('.column').data(matrix).enter().append('g').attr('class', 'column')
 	.attr('transform', function(d, i)  {
 		return 'translate(' + x(i) + ')rotate(-90)';
@@ -149,12 +140,13 @@ var annotate_graph = function(){
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
+	var notes = $('<ul><li>An editor with edits >= 5/month is considered active.</li>\
 <li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
-<li>X-axis No of Edit sessions, Y-axis(month)</li>\
-<li>Each row gives the total edit sessions in a given month.</li>\
-<li>The bar in each row is split by the contribution from each editor cohort.</li>\
-<li>The selector lets you filter the graph by age of a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for cohorts of age 1 in each month, In month Jan 05 - cohort Jan 05 has age 1, Dec 04 has age 2 etc. </li>');
+<li>X-axis (time since the start of the wiki in months)</li>\
+<li>Y-axis (No of active editors in a month. Editor cohorts are stacked to give the total number of active editors a month)</li>\
+<li>Each column gives the total no of active editors in a given month.</li>\
+<li>The bar in each column is split by the contribution from each editor cohort. The contribution from each cohort is stacked to get the total for a month.</li>\
+<li>The brush lets you filter the graph by the age of a cohort in a month. For ex, to see the contribution of only cohorts of age 1 month in every month we select 1-2 in the brush. This lets us see the contribution of the active editors joining in a month to the total active editors in the given month.</li>');
 	$('#notes').append(notes);
 	createTooltip();
 };

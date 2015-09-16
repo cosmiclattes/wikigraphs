@@ -120,12 +120,11 @@ var annotate_graph = function(){
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
-<li>Editors are grouped by the month in which they made their first edit.</li>\
-<li>X-axis(month), Y-axis(editor group)</li>\
-<li>Each row in the graph represents the activity of an editor group, eg: Editors who made their first edit in Jan 05.</li>\
-<li>Each column in a row gives the percentage of editors who were active in a given month(column) from a group(row).</li>\
-<li>The selector lets you filter the graph by percentage. The default selection is 0% - 100%.</li></ul>');
+	var notes = $('<ul><li>An editor with edits >= 5/month is considered active.</li>\
+<li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
+<li>X-axis (time since the start of the wiki in months)</li>\
+<li>Y-axis (editor cohorts)</li>\
+<li>Each row in the graph shows the month on month retention rates for a editor cohort.</li>');
 	$('#notes').append(notes);
 	createTooltip(tooltip_elements);
 };
