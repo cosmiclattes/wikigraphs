@@ -29,8 +29,8 @@ var data_transformation = function(matrix){
 	for(i=0;i<matrix_size;i++){
 		var counter = 0;
 		for(j=0;j<matrix_size;j++){
+			matrix[i][j]['x']=counter;
 			counter += column_width(matrix[i][j]['value']);
-			matrix[i][j]['y']=500-counter;
 		}
 	}
 
@@ -44,29 +44,26 @@ var init_graph = function(matrix){
 	
 	var graph_container = d3.select('#viz').append('svg').attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom).style('margin-left', margin.left + 'px').append('g')
-		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50 + graph_axis_text_width) + ')')
+		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50) + ')')
 		.append('g');
 	graph_container.append('rect').attr('class', 'background').attr('width', graph_width).attr('height', height-50);
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
-			return  'translate(' + x(i) + ', 0)';
-		}).attr('cohort', function(d, i)  { 
-		                var date = time_format.parse(date_reverse_lookup[i]);
-			        return time_format(date);
-	        }).on('mouseover', function(d,i){
-			d3.selectAll('.column text').classed('active', function(d, i) { return false; });
-			d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
+			return  'translate(0,' + x(i) + ')';
+		}).on('mouseover', function(d,i){
+			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
+			d3.select(this).select('text').attr('class','active');
 		});
 	row.selectAll('.cell').data(function(d){
 		return d;
 		}).enter().append('rect').attr('class', 'cell')
-		.attr('y', function(d, i)  {
-			return d.y;
+		.attr('x', function(d, i)  {
+			return d.x;
 		}).attr('width', function(d,i){
-			return x.rangeBand();
+			return column_width(d.value);
 		})
 		.attr('height', function(d,i){
-			return column_width(d.value);
+			return x.rangeBand();
 		}).attr('value', function(d, i)  { 
 		                return d['value']; 
 	        })
@@ -88,11 +85,10 @@ var init_graph = function(matrix){
 		.attr('transform', function(d, i)  {
 			return 'translate(' + x(i) + ')rotate(-90)';
 		});
-	column.append('line').attr('x1', -width);
-	column.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
-		.attr('text-anchor', 'start')
-		.text(function (d, i) { 
-		        var date = time_format.parse(date_reverse_lookup[i]);
+	row.append('line').attr('x2', graph_width);
+	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
+		.attr('text-anchor', 'end').text(function(d,  i) {
+			var date = time_format.parse(date_reverse_lookup[i]);
 		        return time_format(date);
 		});
 	var brush_options ={
@@ -113,11 +109,12 @@ var annotate_graph = function(){
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
+	var notes = $('<ul><li>An editor with edits >= 5/month is considered active.</li>\
 <li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
-<li>X-axis No of Edit sessions, Y-axis(editor cohort)</li>\
+<li>X-axis (time since the start of the wiki)</li>\
+<li>Y-axis (editor cohorts)</li>\
 <li>Each row gives the total edit sessions for a given editor cohort.</li>\
-<li>The brush lets you filter the graph by months since birth in a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for each cohort in its first month, the no of edit sessions in the first month for cohorts Jan 01 ... Dec 15 etc. </li>');
+<li>The brush lets you look at the monthly activity of the cohorts. For ex, to see the activity of every cohort in its first month select 1-2 in the filter. </li>');
 	$('#notes').append(notes);
 	createTooltip();
 };

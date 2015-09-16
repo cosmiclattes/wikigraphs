@@ -103,10 +103,11 @@ var annotate_graph = function(){
 	//Adding Notes
 	var notes = $('<ul><li>When an article has edits >= 5/month by logged in editors the article is considered active.</li>\
 <li>Articles are grouped by the month in which they were created.</li>\
-<li>X-axis(month), Y-axis(article group)</li>\
-<li>Each row in the graph represents the edit activity on an article group</li>\
-<li>Each column in a row gives the percentage of articles that were active in a given month(column) from a group(row).</li>\
-<li>The selector lets you filter the graph by percentage. The default selection is 0% - 100%.</li></ul>');
+<li>X-axis (time since the start of the wiki in months)</li>\
+<li>Y-axis (editor cohorts)</li>\
+<li>Each row shows the longevity/retention of an article cohort over time.</li>\
+<li>Each column in a row gives the percentage of article which were active in a given month (column) from the cohort(row).</li>\
+<li>The brush lets you filter the percentage values.</li></ul>');
 	$('#notes').append(notes);
 	createTooltip();
 };
