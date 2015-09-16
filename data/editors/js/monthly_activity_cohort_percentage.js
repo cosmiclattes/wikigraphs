@@ -24,25 +24,9 @@ var data_transformation = function(matrix){
 	}
 	
 	//Global scale for variable column width
-	column_width = d3.scale.linear().domain([0,100]).range([0,500]);
+	column_width = d3.scale.linear().domain([0,100]).range([0,450]);
 	
-	//Adding the month counter
-	for(i=0;i<matrix_size;i++){
-		var month = 1;
-		var first_month_found = 0;
-		for(j=0;j<matrix_size;j++){
-		        if(matrix[i][j]['value']){
-		                first_month_found += 1;
-		        }
-		        //matrix[i][j]['month'] = j;
-		        //month +=1;
-
-		        if (first_month_found){
-		                matrix[i][j]['month'] = month;
-		                month += 1;
-		        }
-		}
-	}
+	
 
 	//Creating new array
 	matrix_rotated = new Array(matrix_size);
@@ -60,11 +44,31 @@ var data_transformation = function(matrix){
 	for(i=0;i<matrix_size;i++){
 		var counter = 0;
 		for(j=0;j<matrix_size;j++){
-			matrix_rotated[i][j]['x']=counter;
 			counter += column_width(matrix_rotated[i][j]['value']);
+			matrix_rotated[i][j]['y']=450-counter;
 		}
 	}
 	
+	//Adding the month counter
+	for(i=0;i<matrix_size;i++){
+		var month = 1;
+		var first_month_found = 0;
+		for(j=0;j<matrix_size;j++){
+		        if(matrix_rotated[i][j]['value']){
+		                first_month_found = 1;
+		        }
+		        //matrix[i][j]['month'] = j;
+		        //month +=1;
+
+		        if (first_month_found){
+				if(i==1){
+					console.log('Month : '+month+' , '+matrix_rotated[i][j]['value']);
+				}
+		                matrix_rotated[i][j]['month'] = month;
+		                month += 1;
+		        }
+		}
+	}
 	return matrix_rotated;
 };
 
@@ -75,39 +79,60 @@ var init_graph = function(matrix){
 
 	var graph_container = d3.select('#viz').append('svg').attr('width', width + margin.left + margin.right)
 		.attr('height', height + margin.top + margin.bottom).style('margin-left', margin.left + 'px').append('g')
-		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50) + ')')
+		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50 + graph_axis_text_width) + ')')
 		.append('g');
 	graph_container.append('rect').attr('class', 'background').attr('width', width).attr('height', height-50);
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
-			return  'translate(0,' + x(i) + ')';
+			return  'translate(' + x(i) + ',0)';
+		}).attr('month', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
 		}).on('mouseover', function(d,i){
-			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
-			d3.select(this).select('text').attr('class','active');
+			d3.selectAll('.column text').classed('active', function(d, i) { return false; });
+			d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
 		});
 
 	row.selectAll('.cell').data(function(d){
 		return d;
 	}).enter().append('rect').attr('class', 'cell')
-	.attr('x', function(d, i)  {
-		return d.x;
+	.attr('y', function(d, i)  {
+		return d.y;
 	}).attr('width', function(d,i){
-		return column_width(d.value);
-	}).attr('height', function(d,i){
 		return x.rangeBand();
-	}).attr('month', function(d,i){return d.month});
-	row.append('line').attr('x2', graph_width);
-	row.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
-	.attr('text-anchor', 'end').text(function(d,  i) {
-		var date = time_format.parse(date_reverse_lookup[i])
-		return time_format(date);
+	}).attr('height', function(d,i){
+		return column_width(d.value);
+	}).attr('value', function(d, i)  { 
+	                return d['value']; 
+        })
+	.attr('cohort', function(d, i)  { 
+                var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
+	        return time_format(date);
+        }).attr('month_no', function(d, i)  { 
+	        return d.month;
+        })
+	.attr('month', function(d, i)  { 
+                var row = d3.select(this.parentNode);
+	        return row.attr('month');
+        }).on('mouseover', function(d,i){
+                var elem = d3.select(this);
+		showTooltip(elem, '#viz g');
+        })
+	.on('mouseout', function(){
+		hideTooltip();
 	});
 
 	var column = graph_container.selectAll('.column').data(matrix).enter().append('g').attr('class', 'column')
 	.attr('transform', function(d, i)  {
 		return 'translate(' + x(i) + ')rotate(-90)';
 	});
-	
+	column.append('line').attr('x1', -width);
+	column.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
+		.attr('text-anchor', 'start')
+		.text(function (d, i) { 
+		        var date = time_format.parse(date_reverse_lookup[i]);
+		        return time_format(date);
+		});
 	var brush_options ={
 				'height': 30,
 				'width': 2000,
@@ -122,7 +147,7 @@ var init_graph = function(matrix){
 };
 var annotate_graph = function(){
 	//Adding Title
-	var title = 'Monthly Editor Activity % Split By Cohort - Stacked Bars';
+	var title = 'Monthly Editor Activity (%) Split By Cohort';
 	$('.title').text(title);
 	
 	//Adding Notes
@@ -133,6 +158,7 @@ var annotate_graph = function(){
 <li>The bar in each row is split in % by the contribution from each editor cohort.</li>\
 <li>The selector lets you filter the graph by age of a cohort. The default selection is 1 - 179. The graph runs from Jan 01 - Dec 15 which is 180 months. Eg: If the selector is set to 1-2 the graph shows the no of edit sessions for cohorts of age 1 in each month, In month Jan 05 - cohort Jan 05 has age 1, Dec 04 has age 2 etc. </li>');
 	$('#notes').append(notes);
+	createTooltip();
 };
 
 var init_page = function(){
