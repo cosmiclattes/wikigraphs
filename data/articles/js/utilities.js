@@ -187,7 +187,7 @@ var make_filter = function(row, matrix, domain, range, fn){
 		var start = extent[0];
 		var end = extent[1];
 		if(end < max_domain){
-			end = extent[1] + 0.00001 - 1;
+			end = extent[1] - 0.00001;
 		}
 		else{
 			end = extent[1] + 0.00001;
