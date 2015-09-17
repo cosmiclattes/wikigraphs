@@ -51,13 +51,14 @@ var data_transformation = function(matrix){
 		var month = 1;
 		var first_month_found = 0;
 		for(j=0;j<matrix_size;j++){
+			/*
 		        if(matrix_rotated[i][j]['value']){
 		                first_month_found = 1;
 		        }
 		        //matrix[i][j]['month'] = j;
 		        //month +=1;
-
-		        if (first_month_found){
+			*/
+		        if (i+j >= matrix_size-1){
 		                matrix_rotated[i][j]['month'] = month;
 		                month += 1;
 		        }

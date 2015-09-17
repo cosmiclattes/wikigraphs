@@ -50,6 +50,9 @@ var init_graph = function(matrix){
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
 			return  'translate(0,' + x(i) + ')';
+		}).attr('cohort', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
 		}).on('mouseover', function(d,i){
 			d3.selectAll('.row text').classed('active', function(d, i) { return false; });
 			d3.select(this).select('text').attr('class','active');
