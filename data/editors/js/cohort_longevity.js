@@ -46,7 +46,7 @@ var init_graph = function(matrix){
 			.attr('value', function(d, i)  { 
 				return d; 
 			}).attr('month', function(d, i)  { 
-				var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
+				var date = time_format.parse(date_reverse_lookup[i]);
 				return time_format(date);
 			})
 			.attr('cohort', function(d, i)  { 
