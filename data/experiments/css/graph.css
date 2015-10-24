@@ -1,0 +1,118 @@
+body{
+	margin: 0px;
+}
+.background {
+	fill: #eee;
+}
+line {
+	stroke: #fff;
+	shape-rendering: crispEdges;
+}
+text{
+	font-size:7.5px;
+	fill: #333;
+  	stroke: none;
+	shape-rendering: crispEdges;
+  
+}
+text.active{
+	fill: #cc3333;
+}
+
+/* Brush styling */
+.axis text {
+	font: 7px sans-serif;
+	fill: #333;
+}
+
+.axis path {
+	display: none;
+}
+
+.axis line {
+	fill: none;
+	stroke: #7A7A7A;
+	shape-rendering: crispEdges;
+}
+
+.resize {
+  display: inline !important; /* show when empty */
+  fill: #7A7A7A;
+  fill-opacity: 1;
+  stroke: #7A7A7A;
+  stroke-width: 3px;
+}
+
+.resize line{
+	fill: #7A7A7A;
+	fill-opacity: 1;
+	stroke: #7A7A7A;
+	stroke-width: 3px;
+}
+
+.grid-background {
+  fill: #ddd;
+}
+
+.grid line,
+.grid path {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.grid .minor.tick line {
+  stroke-opacity: .5;
+  fill: none;
+  stroke: #7A7A7A;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+.title, #metadata{
+  margin-left: 15px;
+}
+
+#length_query_set, #time_taken_query{
+  display: none;
+}
+
+#notes ul{
+  padding-left: 15px;
+}
+
+.title{
+  font-size: 30px;
+  color: #333;	
+}
+
+/* Tooltip */
+#tooltipContainer {
+  position: absolute;
+  bottom: 0;
+  width: 230px;
+  left: -115px; /* 230/2*/
+  font-size: 12px;
+  line-height: 16px;
+  padding: 10px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.9);
+  color: #000;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.4);
+  -moz-box-shadow: 0 1px 5px rgba(0,0,0,0.4);  
+  border:1px solid rgba(200,200,200,0.85);
+  text-align:center;
+  cursor: default;
+}
+
+#tooltip {
+  text-align:center;  
+  z-index: 1000;
+  position: absolute;
+  opacity: 0;
+}
+
