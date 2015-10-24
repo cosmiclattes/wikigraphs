@@ -16,7 +16,13 @@
 <div>
 <ul>
 <li>
+<<<<<<< HEAD
+=======
 <a href='en/index.html' target='_blank'>en</a>
+</li>
+<li>
+>>>>>>> dev
+<a href='de/index.html' target='_blank'>de</a>
 </li>
 <li>
 <a href='es/index.html' target='_blank'>es</a>

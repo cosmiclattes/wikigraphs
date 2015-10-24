@@ -1,6 +1,6 @@
 /* Scales */
 var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, width]);
-
+var tooltip_elements = ['percentage'];
 var data_transformation = function(matrix){
 	for(i=0;i<matrix_size;i++){
 		var high = 0;
@@ -11,9 +11,11 @@ var data_transformation = function(matrix){
 		}
 		for(j=0;j<matrix_size;j++){
 		        if(high){
-		                console.log(i,j,high, matrix[i][j], Math.round((matrix[i][j]/high)*100));
-		                matrix[i][j]=(matrix[i][j]/high)*100;
+				matrix[i][j]={'value': matrix[i][j], 'percentage':(matrix[i][j]/high)*100 };
 		        }
+			else{
+				matrix[i][j]={'value': 0, 'percentage':0 };
+			}
 		}
 	}
 	return matrix;
@@ -79,12 +81,12 @@ var init_graph = function(matrix){
 
 var annotate_graph = function(){
 	//Adding Title
-	var title = 'Editor Cohort Longevity';
+	var title = 'Article Cohort Longevity';
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
-<li>Editors are grouped by the month in which they made their first edit.</li>\
+	var notes = $('<ul><li>When an article has edits >= 5/month the article is considered active.</li>\
+<li>Articles are grouped by the month in which they were created.</li>\
 <li>X-axis(month), Y-axis(editor group)</li>\
 <li>Each row in the graph represents the activity of an editor group, eg: Editors who made their first edit in Jan 05.</li>\
 <li>Each column in a row gives the percentage of editors who were active in a given month(column) from a group(row).</li>\

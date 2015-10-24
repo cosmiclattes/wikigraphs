@@ -1,6 +1,6 @@
 /* Scales */
 var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, width]);
-var tooltip_elements = ['percentage'];
+
 var data_transformation = function(matrix){
 	for(i=0;i<matrix_size;i++){
 		var high = 0;
@@ -12,17 +12,8 @@ var data_transformation = function(matrix){
 		for(j=0;j<matrix_size;j++){
 		        if(high){
 		                console.log(i,j,high, matrix[i][j], Math.round((matrix[i][j]/high)*100));
-				matrix[i][j] = {
-							'value':matrix[i][j] , 
-							'percentage':(matrix[i][j]/high)*100
-						};
+		                matrix[i][j]=(matrix[i][j]/high)*100;
 		        }
-			else{
-				matrix[i][j] = {
-							'value':0 , 
-							'percentage':0
-						};
-			}
 		}
 	}
 	return matrix;
@@ -53,25 +44,25 @@ var init_graph = function(matrix){
 		        }).attr('width', x.rangeBand())
 		        .attr('height', x.rangeBand())
 			.attr('value', function(d, i)  { 
-				return d.value; 
-			}).attr('percentage', function(d, i)  { 
-				return d.percentage; 
-			}).attr('month', function(d, i)  { 
-				var date = time_format.parse(date_reverse_lookup[i]);
-				return time_format(date);
-			})
+		                return d; 
+		        })
+			.attr('month', function(d, i)  { 
+		                var date = time_format.parse(date_reverse_lookup[i]);
+			        return time_format(date);
+		        })
 			.attr('cohort', function(d, i)  { 
-				var row = d3.select(this.parentNode);
-				return row.attr('cohort');
-			})
-		        .on('mouseover', function(d,i){
+		                var row = d3.select(this.parentNode);
+			        return row.attr('cohort');
+		        })
+			.on('mouseover', function(d,i){
 		                //Highlighting the column index
 		                d3.selectAll(".column text").classed("active", function(d, i) { return false; });
 		                d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
 				
 				var elem = d3.select(this);
-				showTooltip(elem, '#viz g', tooltip_elements);
-		        }).on('mouseout', function(){
+				showTooltip(elem, '#viz g');
+			})
+			.on('mouseout', function(){
 				hideTooltip();
 			});
 	row.append('line').attr('x2', width);
@@ -102,29 +93,28 @@ var init_graph = function(matrix){
 				'round': 1,
 	};
 	init_brush(brush_options, make_filter(row,matrix,[0,0,0,100,100,100],['#ffffff', '#ffffff', '#e5f5f9','#00441b', '#ffffff', '#ffffff'], function(d){
-		return 	d.percentage;
+		return 	d;
 	}));
 };
 
 var annotate_graph = function(){
 	//Adding Title
-	var title = 'Article Cohort Longevity';
+	var title = 'Editor Cohort Longevity';
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an article has edits >= 5/month by logged in editors the article is considered active.</li>\
-<li>Articles are grouped by the month in which they were created.</li>\
-<li>X-axis (time since the start of the wiki in months)</li>\
-<li>Y-axis (editor cohorts)</li>\
-<li>Each row shows the longevity/retention of an article cohort over time.</li>\
-<li>Each column in a row gives the percentage of article which were active in a given month (column) from the cohort(row).</li>\
-<li>The brush lets you filter the percentage values.</li></ul>');
+	var notes = $('<ul><li>When an editor has edits >= 5/month the editor is considered active.</li>\
+<li>Editors are grouped by the month in which they made their first edit.</li>\
+<li>X-axis(month), Y-axis(editor group)</li>\
+<li>Each row in the graph represents the activity of an editor group, eg: Editors who made their first edit in Jan 05.</li>\
+<li>Each column in a row gives the percentage of editors who were active in a given month(column) from a group(row).</li>\
+<li>The selector lets you filter the graph by percentage. The default selection is 0% - 100%.</li></ul>');
 	$('#notes').append(notes);
-	createTooltip(tooltip_elements);
+	createTooltip();
 };
 
 var init_page = function(){
 	matrix = data_transformation(matrix);
 	init_graph(matrix);
-	annotate_graph(tooltip_elements);
+	annotate_graph();
 };

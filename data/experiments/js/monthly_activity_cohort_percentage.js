@@ -4,24 +4,26 @@ var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, graph_wi
 var highest = 1;
 
 var data_transformation = function(matrix){
-	//finding the first month
 
 	for(i=0;i<matrix_size;i++){
 		var total = 0;
 		for(j=0;j<matrix_size;j++){
-			if(matrix[j][i]>highest){
-				highest = matrix[j][i];
-			}
+			total += matrix[j][i];
 		}
 		for(j=0;j<matrix_size;j++){
 			var data ={};
-			data['value'] = matrix[j][i];
+			if(total){
+				data['value'] = (matrix[j][i]/total)*100;
+			}
+			else{
+				data['value'] = 0;
+			}
 			matrix[j][i] = data;
 		}
 	}
 	
 	//Global scale for variable column width
-	column_width = d3.scale.linear().domain([0,highest]).range([0,100]);
+	column_width = d3.scale.linear().domain([0,100]).range([0,450]);
 
 	//Creating new array
 	matrix_rotated = new Array(matrix_size);
@@ -40,7 +42,7 @@ var data_transformation = function(matrix){
 		var counter = 0;
 		for(j=0;j<matrix_size;j++){
 			counter += column_width(matrix_rotated[i][j]['value']);
-			matrix_rotated[i][j]['y']=500-counter;
+			matrix_rotated[i][j]['y']=450-counter;
 		}
 	}
 	
@@ -49,18 +51,18 @@ var data_transformation = function(matrix){
 		var month = 1;
 		var first_month_found = 0;
 		for(j=0;j<matrix_size;j++){
-			/*
 		        if(matrix_rotated[i][j]['value']){
-		                first_month_found += 1;
+		                first_month_found = 1;
 		        }
-			*/
-		        if (i+j >= matrix_size-1){
+		        //matrix[i][j]['month'] = j;
+		        //month +=1;
+
+		        if (first_month_found){
 		                matrix_rotated[i][j]['month'] = month;
 		                month += 1;
 		        }
 		}
 	}
-	
 	return matrix_rotated;
 };
 
@@ -73,17 +75,17 @@ var init_graph = function(matrix){
 		.attr('height', height + margin.top + margin.bottom).style('margin-left', margin.left + 'px').append('g')
 		.attr('transform', 'translate(' + graph_axis_text_width + ',' + (50 + graph_axis_text_width) + ')')
 		.append('g');
-	graph_container.append('rect').attr('class', 'background').attr('width', graph_width).attr('height', height-50);
+	graph_container.append('rect').attr('class', 'background').attr('width', width).attr('height', height-50);
 	var row = graph_container.selectAll('.row').data(matrix).enter().append('g').attr('class', 'row')
 		.attr('transform', function(d, i){
 			return  'translate(' + x(i) + ',0)';
-		}).on('mouseover', function(d,i){
-			d3.selectAll('.column text').classed('active', function(d, i) { return false; });
-			d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
 		}).attr('month', function(d, i)  { 
 		                var date = time_format.parse(date_reverse_lookup[i]);
 			        return time_format(date);
-	        });
+		}).on('mouseover', function(d,i){
+			d3.selectAll('.column text').classed('active', function(d, i) { return false; });
+			d3.select(d3.selectAll('.column text')[0][i]).attr('class','active');
+		});
 
 	row.selectAll('.cell').data(function(d){
 		return d;
@@ -95,8 +97,9 @@ var init_graph = function(matrix){
 	}).attr('height', function(d,i){
 		return column_width(d.value);
 	}).attr('value', function(d, i)  { 
-                return d['value']; 
-        }).attr('cohort', function(d, i)  { 
+	                return d['value']; 
+        })
+	.attr('cohort', function(d, i)  { 
                 var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
 	        return time_format(date);
         })
@@ -104,17 +107,17 @@ var init_graph = function(matrix){
                 var row = d3.select(this.parentNode);
 	        return row.attr('month');
         }).on('mouseover', function(d,i){
-		var elem = d3.select(this);
+                var elem = d3.select(this);
 		showTooltip(elem, '#viz g');
-	}).on('mouseout', function(){
+        })
+	.on('mouseout', function(){
 		hideTooltip();
 	});
-	
+
 	var column = graph_container.selectAll('.column').data(matrix).enter().append('g').attr('class', 'column')
 	.attr('transform', function(d, i)  {
 		return 'translate(' + x(i) + ')rotate(-90)';
 	});
-	
 	column.append('line').attr('x1', -width);
 	column.append('text').attr('x', 0).attr('y', x.rangeBand() / 2).attr('dy', '.32em')
 		.attr('text-anchor', 'start')
@@ -122,7 +125,6 @@ var init_graph = function(matrix){
 		        var date = time_format.parse(date_reverse_lookup[i]);
 		        return time_format(date);
 		});
-	
 	var brush_options ={
 				'height': 30,
 				'width': 2000,
@@ -137,15 +139,16 @@ var init_graph = function(matrix){
 };
 var annotate_graph = function(){
 	//Adding Title
-	var title = 'Monthly Article Edit Activity Split By Cohort';
+	var title = 'Monthly Editor Activity (%) Split By Cohort';
 	$('.title').text(title);
 	
 	//Adding Notes
-	var notes = $('<ul><li>When an article has edits >= 5/month by logged in editors the article is considered active.</li>\
-<li>Articles are grouped by the month in which they were created.</li>\
-<li>Each column gives the total no of active editors in a given month.</li>\
-<li>The bar in each column is split by the contribution from each article cohort. The contribution from each cohort is stacked to get the total for a month.</li>\
-<li>The brush lets you filter the graph by the age of a cohort in a month. For ex, to see the contribution of only cohorts of age 1 month in every month we select 1-2 in the brush. This lets us see the contribution of the active articles created in a month to the total active articles in the given month.</li>');
+	var notes = $('<ul><li>An editor with edits >= 5/month is considered active.</li>\
+<li>Editors are grouped by the month in which they made their first edit - editor cohort.</li>\
+<li>X-axis (time since the start of the wiki in months)</li>\
+<li>Y-axis (% contribution split by the cohorts of active editors in the month.)</li>\
+<li>The previous graph showed the total active editors in a month split by their cohorts. Here each column shows the contribution of each cohort in a month as a % of the total in the month.</li>\
+<li>The brush lets you filter the graph by the age of a cohort in a month. For ex, to see the contribution of only cohorts of age 1 month in every month we select 1-2 in the brush. This lets us see the contribution of the active editors joining in a month to the total active editors in the given month in %.</li>');
 	$('#notes').append(notes);
 	createTooltip();
 };

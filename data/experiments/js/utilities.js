@@ -180,7 +180,6 @@ var date_reverse_lookup={
 178:"Nov 15",
 179:"Dec 15",
 };
-
 var make_filter = function(row, matrix, domain, range, fn){
 		//Getting the max value, fix this in a better way
 		var max_domain = domain[5];
@@ -214,8 +213,7 @@ var make_filter = function(row, matrix, domain, range, fn){
 };
 
 var showTooltip = function(elem, containerSelector, tooltip_elements) {
-	tooltip_elements = tooltip_elements || [];
-	tooltip_elements = tooltip_elements.concat(['month', 'value', 'cohort']);
+	var tooltip_elements = tooltip_elements || ['month', 'value', 'cohort'];
 	var coordinates = d3.mouse(d3.select('body')[0][0]);
 	var x = coordinates[0];
 	var y = coordinates[1];
@@ -252,8 +250,7 @@ var hideTooltip = function(d) {
 }
 
 var createTooltip = function(tooltip_elements){
-	tooltip_elements = tooltip_elements || [];
-	var list = tooltip_elements.concat(['month', 'value', 'cohort']);
+	var list = tooltip_elements || ['month', 'value', 'cohort'];
 	//Creating the tooltip
 	var tooltipContainer = $('<div>').attr('id','tooltipContainer');
 	var tooltip = $('<div>').attr('id','tooltip');
@@ -265,21 +262,6 @@ var createTooltip = function(tooltip_elements){
 	$('body').append(tooltip);
 };
 
-var createTable = function(){
-	var table = $('<table>').attr('id','dataTable');
-	$('<th>Title</th>').appendTo($('<tr>').appendTo($('<thead>').appendTo(table)));
-	$('body').append(table);
-	return $('#dataTable').DataTable();
-};
-
-var addDataToTable = function(table, list){
-	table.clear();
-	for(var i=0;i<list.length;i++){
-		rowData = [list[i]];
-		table.row.add(rowData);	
-	}
-	table.draw(false);
-};
 /* Globals Variables */
 var margin = {top: 25, right: 25, bottom: 25, left: 15};
 var width = 1350 - margin.right - margin.left, height = 1400 - margin.top - margin.right; 
