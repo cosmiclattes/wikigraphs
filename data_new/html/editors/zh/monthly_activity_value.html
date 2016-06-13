@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<title class="title">Editor Monthly Activity - Value</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../css/graph.css">
+<script src="../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../js/libs/utilities.js"></script>
+<script src="../../../js/libs/brush.js"></script>
+<script src="data/session.js"></script>
+<script src="../../../js/graphs/monthly_activity_value.js"></script>
+</head>
+<body>
+<p class="title">Editor Monthly Activity - Value</p>
+<div id="viz"></div>
+<div id="metadata">
+	<div id="intro">
+		<p class="title">What is this graph?</p>
+		<p>This graph shows the monthly edit activity split by the contribution from each editor cohort.</p>
+	</div>
+	<div id="explanation">
+		<p class="title">How do I read the graph?</p>
+		<ul>
+			<li>When an editor has edits >= 5/month the editor is considered active.</li>
+			<li>editors are grouped by the month where they made their first edit.</li>
+			<li>X-axis (time since the start of the wiki in months)</li>
+			<li>Y-axis (contribution split by the cohorts of active editors in the month.)</li>
+			<li>Each column gives the total no of active editors in a given month.</li>
+			<li>Each data point gives the contribution from each editor cohort. The contribution from each cohort is stacked to get the total for a month.</li>
+			<li>The brush lets you filter the graph by the age of a cohort in a month. For ex, to see the contribution of only cohorts of age 1 month in every month we select 1-2 in the brush. This lets us see the contribution of the active editors created in a month to the total active editors in the given month.</li>
+	</div>
+	<div id="inference">
+		<p class="title">What insights do we have here?</p>
+		<ul>
+			<!-- <li></li> -->
+		</ul>
+	</div>
+</div>
+</body>
+

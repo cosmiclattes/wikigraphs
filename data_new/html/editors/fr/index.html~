@@ -1,0 +1,36 @@
+<html>
+<body>
+<h2>The Graphs</h2>
+<div>
+<ul>
+<li>
+<a href='cohort_longevity.html' target='_blank'>Editor Cohort Longevity</a>
+</li>
+<li>
+<a href='cohort_retention_rate.html' target='_blank'>Editor Cohort Retention Rate</a>
+</li>
+<li>
+<a href='cohort_activity_value.html' target='_blank'>Editor Cohort Activity - Value</a>
+</li>
+<li>
+<a href='cohort_bytes_added_value.html' target='_blank'>Editor Cohort Bytes Added - Value</a>
+</li>
+<li>
+<a href='monthly_activity_percentage.html' target='_blank'>Editor Monthly Activity - Percentage</a>
+</li>
+<li>
+<a href='monthly_bytes_added_percentage.html' target='_blank'>Monthly Bytes Added - Percentage</a>
+</li>
+<li>
+<a href='monthly_bytes_added_value.html' target='_blank'>Monthly Bytes Added - Value</a>
+</li>
+<li>
+<a href='sessions_birth_vs_editors.html' target='_blank'>Editor Sessions(Birth) vs Editors</a>
+</li>
+<li>
+<a href='sessions_birth_vs_editors.html' target='_blank'>Editor Sessions(Count) vs Editors</a>
+</li>
+</ul>
+</div>
+</body>
+</html>

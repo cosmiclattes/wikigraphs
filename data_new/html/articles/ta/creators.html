@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<title class="title">Article Creators</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../css/graph.css">
+<script src="../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../js/libs/utilities.js"></script>
+<script src="../../../js/libs/brush.js"></script>
+<script src="data/creators.js"></script>
+<script src="../../../js/graphs/creators.js"></script>
+</head>
+<body>
+<p class="title">Article Creators</p>
+<div id="viz"></div>
+<div id="metadata">
+	<div id="intro">
+		<p class="title">What is this graph?</p>
+		<p>It shows which editor groups are creating articles and when. It splits the articles created in a month by the editor groups that are creating them. It should approximately give an idea of who creates articles in any given month and how experienced they are when the create the articles.</p>
+	</div>
+	<div id="explanation">
+		<p class="title">How do I read the graph?</p>
+		<ul>
+			<li>X-axis (time since the start of the wiki in months)</li>
+			<li>Editors are grouped by the month where they made their first edit - Editor Cohorts</li>
+			<li>Y-axis (editor cohorts)</li>
+			<li>Each data point in a row gives the percentage of article which were created in a given month (column) by the editor cohort(row).</li>
+			<li>The demoninator at each data point is the total number of articles that were created in a month.</li>
+			<li>The brush lets you filter by the percentage values of the data points.</li>
+		</ul>
+	</div>
+	<div id="inference">
+		<p class="title">What insights do we have here?</p>
+		<ul>
+			<!-- <li></li> -->
+		</ul>
+	</div>
+</div>
+</body>
+
