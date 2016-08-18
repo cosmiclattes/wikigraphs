@@ -2,7 +2,7 @@
 var x = d3.scale.ordinal().domain(d3.range(matrix_size)).rangeBands([0, graph_width]);
 
 var highest = 1;
-
+var tooltip_elements = ['total'];
 var data_transformation = function(matrix){
 	//finding the first month
 
@@ -12,10 +12,13 @@ var data_transformation = function(matrix){
 			if(matrix[j][i]>highest){
 				highest = matrix[j][i];
 			}
+			total += matrix[j][i];
 		}
+		console.log('Total' , total);
 		for(j=0;j<matrix_size;j++){
 			var data ={};
 			data['value'] = matrix[j][i];
+			data['total'] = total;
 			matrix[j][i] = data;
 		}
 	}
@@ -96,6 +99,8 @@ var init_graph = function(matrix){
 		return column_width(d.value);
 	}).attr('value', function(d, i)  { 
                 return d['value']; 
+        }).attr('total', function(d, i)  { 
+                return d['total']; 
         }).attr('cohort', function(d, i)  { 
                 var date = time_format.parse(date_reverse_lookup[matrix_size -1 -i]);
 	        return time_format(date);
@@ -105,7 +110,7 @@ var init_graph = function(matrix){
 	        return row.attr('month');
         }).on('mouseover', function(d,i){
 		var elem = d3.select(this);
-		showTooltip(elem, '#viz g');
+		showTooltip(elem, '#viz g', tooltip_elements);
 	}).on('mouseout', function(){
 		hideTooltip();
 	});
@@ -142,7 +147,7 @@ var annotate_graph = function(){
 var init_page = function(){
 	matrix = data_transformation(data);
 	init_graph(matrix);
-	annotate_graph();
+	createTooltip(tooltip_elements);
 };
 
 window.onload = function(){
