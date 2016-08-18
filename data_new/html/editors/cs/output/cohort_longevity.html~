@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<title class="title">Editor Cohort Longevity</title>
+<head>
+<<<<<<< HEAD:data_new/html/editors/fr/cohort_longevity.html
+<link rel="stylesheet" type="text/css" href="../../../css/graph.css">
+<script src="../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../js/libs/utilities.js"></script>
+<script src="../../../js/libs/brush.js"></script>
+<script src="data/session.js"></script>
+<script src="data/weight.js"></script>
+<script src="../../../js/graphs/cohort_longevity.js"></script>
+=======
+<link rel="stylesheet" type="text/css" href="../../../../css/graph.css">
+<script src="../../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../../js/libs/utilities.js"></script>
+<script src="../../../../js/libs/brush.js"></script>
+<script src="../data/session.js"></script>
+<script src="../data/weight.js"></script>
+<script src="../../../../js/graphs/cohort_longevity.js"></script>
+>>>>>>> master:data_new/html/editors/cs/output/cohort_longevity.html
+</head>
+<body>
+<p class="title">Editor Cohort Longevity</p>
+<div id="viz"></div>
+<div id="metadata">
+	<div id="intro">
+		<p class="title">What is this graph?</p>
+		<p>This graph shows the retention in edit activity of editors in an editor cohort over its lifetime.</p>
+	</div>
+	<div id="explanation">
+		<p class="title">How do I read the graph?</p>
+		<ul>
+			<li>When an editor has edits >= 5/month by logged in editors the editor is considered active.</li>
+			<li>editors are grouped by the month in which they were created.</li>
+			<li>X-axis (time since the start of the wiki in months)</li>
+			<li>Y-axis (editor cohorts)</li>
+			<li>Each row shows the longevity/retention of an editor cohort over time.</li>
+			<li>Each data point gives the percentage of editors who were active in a given month (column) from the cohort(row).</li>
+			<li>The demoninator in each row, is the total number of editors who were active in a given cohort in its lifetime.</li>
+			<li>The brush lets you filter the percentage values.</li>
+		</ul>
+	</div>
+	
+	<div id="inference">
+	<p class="title">What insights do we have here?</p>
+	<ul>
+		
+
+	</ul>
+</div>
+
+</div>
+</body>

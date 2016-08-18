@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<title class="title">Editor Cohort Retention Rate</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../../css/graph.css">
+<script src="../../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../../js/libs/utilities.js"></script>
+<script src="../../../../js/libs/brush.js"></script>
+<script src="../data/session.js"></script>
+<script src="../../../../js/graphs/cohort_retention_rate.js"></script>
+</head>
+<body>
+<p class="title">Editor Cohort Retention Rate</p>
+<div id="viz"></div>
+<div id="metadata">
+	<div id="intro">
+		<p class="title">What is this graph?</p>
+		<p>It shows how the edit activity on of editors who joined in a given month changes month over month. </p>
+	</div>
+	<div id="explanation">
+		<p class="title">How do I read the graph?</p>
+		<ul>
+			<li>When an editor has edits >= 5/month the editor is counted as active. If editor has only a single edit it isn't counted.</li>
+			<li>X-axis (time since the start of the wiki in months)</li>
+			<li>editors are grouped by the month where they made their first edit - editor Cohorts</li>
+			<li>Y-axis (editor cohorts)</li>
+			<li>Each row in the graph represents the activity of an editor group, eg: Editors who made their first edit in Jan 05.</li>
+			<li>Each data point in a row gives the percentage change of editors who were active in the current month over the previous month in that given row (editor cohort).</li>
+			<li>The brush lets you filter by the percentage values of the data points.</li>
+		</ul>
+	</div>
+	
+	<div id="inference">
+	<p class="title">What insights do we have here?</p>
+	<ul>
+		
+
+	</ul>
+</div>
+
+</div>
+</body>
