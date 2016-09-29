@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<title class="title">Article Cohort Longevity</title>
+<head>
+<link rel="stylesheet" type="text/css" href="../../../css/graph.css">
+<script src="../../../js/ext_libs/d3.min.js"></script>
+<script src="../../../js/ext_libs/jquery.min.js"></script>
+<script src="../../../js/libs/utilities.js"></script>
+<script src="../../../js/libs/brush.js"></script>
+<script src="data/session.js"></script>
+<script src="data/weight.js"></script>
+<script src="../../../js/graphs/cohort_longevity.js"></script>
+</head>
+<body>
+<p class="title">Article Cohort Longevity</p>
+<div id="viz"></div>
+<div id="metadata">
+	<div id="intro">
+		<p class="title">What is this graph?</p>
+		<p>This graph shows the retention in edit activity of articles in an article cohort over its lifetime.</p>
+	</div>
+	<div id="explanation">
+		<p class="title">How do I read the graph?</p>
+		<ul>
+			<li>When an article has edits >= 5/month by logged in editors the article is considered active.</li>
+			<li>Articles are grouped by the month in which they were created.</li>
+			<li>X-axis (time since the start of the wiki in months)</li>
+			<li>Y-axis (editor cohorts)</li>
+			<li>Each row shows the longevity/retention of an article cohort over time.</li>
+			<li>Each data point gives the percentage of article which were active in a given month (column) from the cohort(row).</li>
+			<li>The demoninator in each row, is the total number of articles that were active in a given cohort in its lifetime.</li>
+			<li>The brush lets you filter the percentage values.</li>
+		</ul>
+	</div>
+	<div id="inference">
+		<p class="title">What insights do we have here?</p>
+		<ul>
+			<!-- <li></li> -->
+		</ul>
+	</div>
+</div>
+</body>
+
